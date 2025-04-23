@@ -45,7 +45,7 @@ CREATE TABLE facturas (
     concepto TEXT,
     base_imponible NUMERIC(10, 2) NOT NULL,
     iva NUMERIC(5, 2) DEFAULT 21.00,
-    total NUMERIC(10, 2) GENERATED ALWAYS AS (base_imponible * (1 + iva / 100)) STORED,
+    total NUMERIC(10, 2),
     observaciones TEXT,
     creado_en TIMESTAMP DEFAULT NOW()
 );
