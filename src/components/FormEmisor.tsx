@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { Emisor } from '../types'
+import { encriptar } from '../utils/encryption'
 
 interface Props {
   onSubmit: (emisor: Emisor) => void
@@ -23,6 +24,13 @@ const FormEmisor = ({ onSubmit }: Props) => {
     codigo_postal: '',
     pais: '',
   })
+
+  if (emisor.cif) {
+    emisor.cif = encriptar(emisor.cif);
+  }
+  if (emisor.nif) {
+    emisor.nif = encriptar(emisor.nif);
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target

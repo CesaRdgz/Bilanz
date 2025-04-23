@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { Empresa } from '../types'
+import { encriptar } from '../utils/encryption'
 
 interface Props {
   onSubmit: (empresa: Empresa) => void
@@ -22,6 +23,10 @@ const FormEmpresa = ({ onSubmit }: Props) => {
     email: '',
     telefono: '',
   })
+
+  if (empresa.cif) {
+    empresa.cif = encriptar(empresa.cif);
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
