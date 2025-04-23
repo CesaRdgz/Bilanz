@@ -24,10 +24,6 @@ const FormEmpresa = ({ onSubmit }: Props) => {
     telefono: '',
   })
 
-  if (empresa.cif) {
-    empresa.cif = encriptar(empresa.cif);
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setEmpresa(prev => ({
@@ -38,6 +34,9 @@ const FormEmpresa = ({ onSubmit }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (empresa.cif) {
+      empresa.cif = encriptar(empresa.cif);
+    }
     onSubmit(empresa)
   }
 

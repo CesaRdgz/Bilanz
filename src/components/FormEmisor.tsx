@@ -25,13 +25,6 @@ const FormEmisor = ({ onSubmit }: Props) => {
     pais: '',
   })
 
-  if (emisor.cif) {
-    emisor.cif = encriptar(emisor.cif);
-  }
-  if (emisor.nif) {
-    emisor.nif = encriptar(emisor.nif);
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setEmisor(prev => ({
@@ -42,6 +35,12 @@ const FormEmisor = ({ onSubmit }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (emisor.cif) {
+      emisor.cif = encriptar(emisor.cif);
+    }
+    if (emisor.nif) {
+      emisor.nif = encriptar(emisor.nif);
+    }
     onSubmit(emisor)
   }
 
