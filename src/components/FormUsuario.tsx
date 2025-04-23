@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 
 import { useState } from "react"
 import { Usuario } from "../types"
+import { encriptar } from '../utils/encryption'
 
 interface Props {
   onSubmit: (usuario: Usuario) => void
@@ -18,6 +19,10 @@ const FormUsuario = ({ onSubmit }: Props) => {
     password: '',
     telefono: '',
   })
+
+  if (usuario.telefono) {
+    usuario.telefono = encriptar(usuario.telefono);
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
