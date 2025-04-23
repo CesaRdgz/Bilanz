@@ -20,10 +20,6 @@ const FormUsuario = ({ onSubmit }: Props) => {
     telefono: '',
   })
 
-  if (usuario.telefono) {
-    usuario.telefono = encriptar(usuario.telefono);
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setUsuario(prev => ({
@@ -38,6 +34,10 @@ const FormUsuario = ({ onSubmit }: Props) => {
     // Hashear contraseña antes de enviar
     const salt = bcrypt.genSaltSync(10)
     const password = bcrypt.hashSync(usuario.password || '', salt)
+
+    if (usuario.telefono) {
+      usuario.telefono = encriptar(usuario.telefono);
+    }
 
     // Crea nuevo objeto con la contraseña hasheada y el dni y cif encriptados
     const usuarioConHashEncriptado: Usuario = {
