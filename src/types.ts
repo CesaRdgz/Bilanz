@@ -1,14 +1,15 @@
 export interface Factura {
-  numero_factura: string;
-  fecha_emision: string;   
-  fecha_vencimiento?: string;
-  estado?: 'borrador' | 'enviada' | 'pagada' | 'vencida';
-  subtotal?: number;
-  iva_total?: number;
-  total?: number;
-  notas?: string;
-  company_id?: string;
-  user_id?: string;
+  id: string;
+  emisor_id: string;
+  empresa_id: string;
+  numero: string;
+  fecha_emision: string; // ISO date
+  concepto?: string;
+  base_imponible: number;
+  iva?: number;
+  total: number;
+  observaciones?: string;
+  creado_en: string;
 }
 
 export interface Usuario {
