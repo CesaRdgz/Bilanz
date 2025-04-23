@@ -1,0 +1,26 @@
+{
+    "facturas": {
+        "titulo": "Invoices",
+        "numero_factura": "Number of invoice",
+        "fecha_emision": "Emision Date",
+        "estado": "Status",
+        "subtotal": "Subtotal",
+        "iva_total": "IVA Total",
+        "total": "Total",
+        "notas": "Notes",
+        "crear_factura": "Create Invoice",
+        "lista_facturas": "List of Invoices",
+        "nueva_factura": "New Invoice"
+    },
+    
+    "usuarios": {
+        "titulo": "Users",
+        "nombre": "Name",
+        "email": "Email",
+        "contraseña": "Password",
+        "crear_usuario": "Create User",
+        "lista_usuarios": "List of Users",
+        "nuevo_usuario": "New User",
+        "telefono": "Phone"
+    }
+}
