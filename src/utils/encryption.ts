@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js';
 
-const SECRET_KEY = import.meta.env.ENCRYPTION_KEY;
+const SECRET_KEY = import.meta.env.VITE_ENCRYPTION_KEY
 
 // Encriptar
 export const encriptar = (texto: string) => {
@@ -11,6 +11,5 @@ export const encriptar = (texto: string) => {
 // Desencriptar
 export const desencriptar = (textoEncriptado: string) => {
   const bytes = CryptoJS.AES.decrypt(textoEncriptado, SECRET_KEY);
-  const origianlText = bytes.toString(CryptoJS.enc.Utf8);
-  return origianlText;
+  return bytes.toString(CryptoJS.enc.Utf8);
 };
