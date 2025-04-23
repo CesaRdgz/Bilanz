@@ -1,5 +1,5 @@
 export interface Factura {
-  id: string;
+  id?: string;
   emisor_id: string;
   empresa_id: string;
   numero: string;
