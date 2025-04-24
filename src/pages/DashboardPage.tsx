@@ -24,8 +24,8 @@ const DashboardPage = () => {
       </button>
 
       <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
-      onClick={() => navigate('/empresa/CrearEmpresa')}>
-        Crear empresa
+      onClick={() => navigate('/cliente/CrearCliente')}>
+        Crear cliente
       </button>
       </div>
     )

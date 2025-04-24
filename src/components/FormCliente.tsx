@@ -1,33 +1,37 @@
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { Emisor } from '../types'
+import { Cliente } from '../types'
 import { encriptar } from '../utils/encryption'
 
 interface Props {
-  onSubmit: (emisor: Emisor) => void
+  onSubmit: (cliente: Cliente) => void
 }
 
-const FormEmisor = ({ onSubmit }: Props) => {
+const FormCliente = ({ onSubmit }: Props) => {
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}')
   const { t } = useTranslation()
 
-  const [emisor, setEmisor] = useState<Emisor>({
+  const [cliente, setCliente] = useState<Cliente>({
     usuario_id: usuario.id,
-    tipo: 'autonomo',
+    tipo_cliente: 'particular',
     nombre: '',
     apellidos: '',
     nif: '',
     cif: '',
-    direccion_fiscal: '',
+    direccion: '',
     ciudad: '',
     provincia: '',
     codigo_postal: '',
     pais: '',
+    email: '',
+    telefono: '',
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target
-    setEmisor(prev => ({
+    setCliente(prev => ({
       ...prev,
       [name]: value,
     }))
@@ -35,23 +39,23 @@ const FormEmisor = ({ onSubmit }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (emisor.cif) {
-      emisor.cif = encriptar(emisor.cif);
-    }
-    if (emisor.nif) {
-      emisor.nif = encriptar(emisor.nif);
-    }
-
-    onSubmit(emisor)
+    if (cliente.cif) cliente.cif = encriptar(cliente.cif)
+    if (cliente.nif) cliente.nif = encriptar(cliente.nif)
+    onSubmit(cliente)
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label>{t('Tipo de emisor')}</label>
-        <select name="tipo" value={emisor.tipo} onChange={handleChange} className="w-full border rounded p-2">
-          <option value="autonomo">{t('Autónomo')}</option>
-          <option value="cliente">{t('Cliente')}</option>
+        <label>{t('Tipo de cliente')}</label>
+        <select
+          name="tipo_cliente"
+          value={cliente.tipo_cliente}
+          onChange={handleChange}
+          className="w-full border rounded p-2"
+        >
+          <option value="particular">{t('Particular')}</option>
+          <option value="empresa">{t('Empresa')}</option>
         </select>
       </div>
 
@@ -60,32 +64,31 @@ const FormEmisor = ({ onSubmit }: Props) => {
         <input
           type="text"
           name="nombre"
-          value={emisor.nombre}
+          value={cliente.nombre}
           onChange={handleChange}
           className="w-full border rounded p-2"
           required
         />
       </div>
 
-      {emisor.tipo === 'autonomo' && (
+      {cliente.tipo_cliente === 'particular' && (
         <>
           <div>
             <label>{t('Apellidos')}</label>
             <input
               type="text"
               name="apellidos"
-              value={emisor.apellidos}
+              value={cliente.apellidos}
               onChange={handleChange}
               className="w-full border rounded p-2"
             />
           </div>
-
           <div>
             <label>{t('NIF / DNI')}</label>
             <input
               type="text"
               name="nif"
-              value={emisor.nif}
+              value={cliente.nif}
               onChange={handleChange}
               className="w-full border rounded p-2"
               required
@@ -94,13 +97,13 @@ const FormEmisor = ({ onSubmit }: Props) => {
         </>
       )}
 
-      {emisor.tipo === 'cliente' && (
+      {cliente.tipo_cliente === 'empresa' && (
         <div>
           <label>{t('CIF')}</label>
           <input
             type="text"
             name="cif"
-            value={emisor.cif}
+            value={cliente.cif}
             onChange={handleChange}
             className="w-full border rounded p-2"
             required
@@ -109,10 +112,10 @@ const FormEmisor = ({ onSubmit }: Props) => {
       )}
 
       <div>
-        <label>{t('Dirección fiscal')}</label>
+        <label>{t('Dirección')}</label>
         <textarea
-          name="direccion_fiscal"
-          value={emisor.direccion_fiscal}
+          name="direccion"
+          value={cliente.direccion}
           onChange={handleChange}
           className="w-full border rounded p-2"
         />
@@ -123,7 +126,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
         <input
           type="text"
           name="ciudad"
-          value={emisor.ciudad}
+          value={cliente.ciudad}
           onChange={handleChange}
           className="w-full border rounded p-2"
         />
@@ -134,7 +137,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
         <input
           type="text"
           name="provincia"
-          value={emisor.provincia}
+          value={cliente.provincia}
           onChange={handleChange}
           className="w-full border rounded p-2"
         />
@@ -145,7 +148,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
         <input
           type="text"
           name="codigo_postal"
-          value={emisor.codigo_postal}
+          value={cliente.codigo_postal}
           onChange={handleChange}
           className="w-full border rounded p-2"
         />
@@ -156,17 +159,39 @@ const FormEmisor = ({ onSubmit }: Props) => {
         <input
           type="text"
           name="pais"
-          value={emisor.pais}
+          value={cliente.pais}
+          onChange={handleChange}
+          className="w-full border rounded p-2"
+        />
+      </div>
+
+      <div>
+        <label>{t('Correo electrónico')}</label>
+        <input
+          type="email"
+          name="email"
+          value={cliente.email}
+          onChange={handleChange}
+          className="w-full border rounded p-2"
+        />
+      </div>
+
+      <div>
+        <label>{t('Teléfono')}</label>
+        <input
+          type="text"
+          name="telefono"
+          value={cliente.telefono}
           onChange={handleChange}
           className="w-full border rounded p-2"
         />
       </div>
 
       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        {t('Guardar emisor')}
+        {t('Guardar cliente')}
       </button>
     </form>
   )
 }
 
-export default FormEmisor
+export default FormCliente
