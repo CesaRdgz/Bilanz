@@ -21,7 +21,8 @@ const LoginPage = () => {
       const usuarioParaGuardar = {
         id: usuario.id,
         email: usuario.email,
-        nombre: usuario.nombre
+        nombre: usuario.nombre,
+        telefono: usuario.telefono
       }
 
       localStorage.setItem('usuario', JSON.stringify(usuarioParaGuardar))
