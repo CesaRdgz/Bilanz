@@ -1,7 +1,7 @@
 export interface Factura {
   id?: string;
   emisor_id: string;
-  empresa_id: string;
+  cliente_id: string;
   numero: string;
   fecha_emision: string; // ISO date
   concepto?: string;
@@ -24,7 +24,7 @@ export interface Usuario {
 export interface Emisor {
   id?: string;
   usuario_id: string;
-  tipo: 'autonomo' | 'empresa';
+  tipo: 'autonomo' | 'cliente';
   nombre: string;
   apellidos?: string;
   nif?: string;
@@ -36,11 +36,13 @@ export interface Emisor {
   pais?: string;
 }
 
-export interface Empresa {
+export interface Cliente {
   id?: string;
   usuario_id: string;
+  tipo_cliente: 'empresa' | 'particular';
+
+  // Comunes
   nombre: string;
-  cif: string;
   direccion?: string;
   ciudad?: string;
   provincia?: string;
@@ -48,4 +50,12 @@ export interface Empresa {
   pais?: string;
   email?: string;
   telefono?: string;
+
+  // Solo para empresas
+  cif?: string;
+
+  // Solo para particulares
+  apellidos?: string;
+  nif?: string;
 }
+
