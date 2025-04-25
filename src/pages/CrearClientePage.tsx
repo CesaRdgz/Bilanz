@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Cliente } from "../types";
 import { crearCliente } from '../services/clienteService';
-import FormCliente from '../components/FormCliente';
+import FormCliente from '../components/Clientes/FormCliente';
 
 const CrearClientePage = () => {
 
@@ -23,7 +23,7 @@ const CrearClientePage = () => {
   
     return (
       <div className="max-w-md mx-auto mt-8">
-        <h1 className="text-2xl font-bold mb-4">{t('clientes.nuevo_cliente')}</h1>
+        <h1 className="text-2xl font-bold mb-4">{t('cliente.boton.nuevo_cliente')}</h1>
         <FormCliente onSubmit={handleCrear} />
       </div>
     )

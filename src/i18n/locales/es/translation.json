@@ -1,5 +1,5 @@
 {
-    "facturas": {
+    "factura": {
         "titulo": "Facturas",
         "numero_factura": "Número de factura",
         "fecha_emision": "Fecha de emisión",
@@ -13,7 +13,7 @@
         "nueva_factura": "Nueva Factura"
     },
     
-    "usuarios": {
+    "usuario": {
         "titulo": "Usuarios",
         "nombre": "Nombre",
         "email": "Email",
@@ -21,5 +21,51 @@
         "crear_usuario": "Crear Usuario",
         "nuevo_usuario": "Nuevo Usuario",
         "telefono": "Teléfono"
+    },
+
+    "cliente": {
+        "titulo": "Clientes",
+        "tipo_cliente": "Tipo de cliente",
+        "empresa": "Empresa",
+        "empresas": "Empresas",
+        "particular": "Particular",
+        "particulares": "Particulares",
+        "datos": {
+            "nombre": "Nombre",
+            "nombre_completo": "Nombre completo",
+            "apellidos": "Apellidos",
+            "cif": "CIF",
+            "nif": "NIF",
+            "telefono": "Teléfono",
+            "email": "Email",
+            "tipo_cliente": "Tipo de cliente",
+            "direccion": "Dirección",
+            "ciudad": "Ciudad",
+            "provincia": "Provincia",
+            "codigo_postal": "Código postal",
+            "pais": "País"
+        },
+        "boton":{
+            "nuevo_cliente": "Nuevo cliente",
+            "editar_cliente": "Editar cliente",
+            "eliminar_cliente": "Eliminar cliente",
+            "guardar_cliente": "Guardar cliente",
+            "si": "Sí",
+            "no": "No"
+        },
+        "popup": {
+            "eliminar_cliente": "¿Estás seguro que quieres eliminar este cliente?",
+            "eliminar_cliente_confirmacion": "Sí, eliminar"
+        }, 
+        "placeholder": {            
+            "buscar_cliente": "Buscar clientes..."
+        }
+    },
+
+    "boton": {
+        "editar": "Editar",
+        "eliminar": "Eliminar",
+        "si": "Sí",
+        "no": "No"
     }
 }

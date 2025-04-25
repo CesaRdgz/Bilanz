@@ -1,26 +1,48 @@
 {
     "facturas": {
-        "titulo": "Invoices",
-        "numero_factura": "Number of invoice",
-        "fecha_emision": "Emision Date",
-        "estado": "Status",
+        "titulo": "Facturas",
+        "numero_factura": "Número de factura",
+        "fecha_emision": "Fecha de emisión",
+        "estado": "Estado",
         "subtotal": "Subtotal",
         "iva_total": "IVA Total",
         "total": "Total",
-        "notas": "Notes",
-        "crear_factura": "Create Invoice",
-        "lista_facturas": "List of Invoices",
-        "nueva_factura": "New Invoice"
+        "notas": "Notas",
+        "crear_factura": "Crear Factura",
+        "lista_facturas": "Lista de Facturas",
+        "nueva_factura": "Nueva Factura"
     },
     
     "usuarios": {
-        "titulo": "Users",
-        "nombre": "Name",
+        "titulo": "Usuarios",
+        "nombre": "Nombre",
         "email": "Email",
-        "contraseña": "Password",
-        "crear_usuario": "Create User",
-        "lista_usuarios": "List of Users",
-        "nuevo_usuario": "New User",
-        "telefono": "Phone"
+        "contraseña": "Contraseña",
+        "crear_usuario": "Crear Usuario",
+        "nuevo_usuario": "Nuevo Usuario",
+        "telefono": "Teléfono"
+    },
+
+    "clientes": {
+        "titulo": "Clientes",
+        "tipo_cliente": "Tipo de cliente",
+        "empresa": "Empresa",
+        "particular": "Particular",
+        "nombre": "Nombre",
+        "apellidos": "Apellidos",
+        "cif": "CIF",
+        "nif": "NIF",
+        "telefono": "Teléfono",
+        "email": "Email",
+        "boton":{
+            "nuevo_cliente": "Nuevo cliente",
+            "editar_cliente": "Editar cliente",
+            "eliminar_cliente": "Eliminar cliente"
+        }
+    },
+
+    "boton": {
+        "editar": "Editar",
+        "eliminar": "Eliminar"
     }
 }
