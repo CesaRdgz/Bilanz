@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loginUsuario } from '../services/authService'
+import { obtenerEmisorPorUsuario } from '../services/emisorService'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -25,7 +26,11 @@ const LoginPage = () => {
         telefono: usuario.telefono
       }
 
+      const { data, error } = await obtenerEmisorPorUsuario(usuario.id!)
+
       localStorage.setItem('usuario', JSON.stringify(usuarioParaGuardar))
+      if (data)localStorage.setItem('emisor', JSON.stringify(data))
+
       navigate('/dashboard') // Página protegida (en blanco por ahora)
     }
   }

@@ -9,3 +9,13 @@ import supabase from '../utils/supabase'
   
     return { data, error }
   }
+
+  export const obtenerEmisorPorUsuario = async (usuario_id: string) => {
+    const { data, error } = await supabase
+      .from('emisores')
+      .select('*')
+      .eq('usuario_id', usuario_id)
+      .single(); // Si solo puede haber un emisor por usuario
+  
+    return { data, error };
+  }
