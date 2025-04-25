@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { Cliente } from '../types'
-import { encriptar } from '../utils/encryption'
+import { Cliente } from '../../types'
+import { encriptar } from '../../utils/encryption'
+
 
 interface Props {
   onSubmit: (cliente: Cliente) => void
@@ -47,20 +48,20 @@ const FormCliente = ({ onSubmit }: Props) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label>{t('Tipo de cliente')}</label>
+        <label>{t('cliente.datos.tipo_cliente')}</label>
         <select
           name="tipo_cliente"
           value={cliente.tipo_cliente}
           onChange={handleChange}
           className="w-full border rounded p-2"
         >
-          <option value="particular">{t('Particular')}</option>
-          <option value="empresa">{t('Empresa')}</option>
+          <option value="particular">{t('cliente.particular')}</option>
+          <option value="empresa">{t('cliente.empresa')}</option>
         </select>
       </div>
 
       <div>
-        <label>{t('Nombre')}</label>
+        <label>{t('cliente.datos.nombre')}</label>
         <input
           type="text"
           name="nombre"
@@ -74,7 +75,7 @@ const FormCliente = ({ onSubmit }: Props) => {
       {cliente.tipo_cliente === 'particular' && (
         <>
           <div>
-            <label>{t('Apellidos')}</label>
+            <label>{t('cliente.datos.apellidos')}</label>
             <input
               type="text"
               name="apellidos"
@@ -84,7 +85,7 @@ const FormCliente = ({ onSubmit }: Props) => {
             />
           </div>
           <div>
-            <label>{t('NIF / DNI')}</label>
+            <label>{t('cliente.datos.nif')}</label>
             <input
               type="text"
               name="nif"
@@ -99,7 +100,7 @@ const FormCliente = ({ onSubmit }: Props) => {
 
       {cliente.tipo_cliente === 'empresa' && (
         <div>
-          <label>{t('CIF')}</label>
+          <label>{t('cliente.datos.cif')}</label>
           <input
             type="text"
             name="cif"
@@ -112,7 +113,7 @@ const FormCliente = ({ onSubmit }: Props) => {
       )}
 
       <div>
-        <label>{t('Dirección')}</label>
+        <label>{t('cliente.datos.direccion')}</label>
         <textarea
           name="direccion"
           value={cliente.direccion}
@@ -122,7 +123,7 @@ const FormCliente = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('Ciudad')}</label>
+        <label>{t('cliente.datos.ciudad')}</label>
         <input
           type="text"
           name="ciudad"
@@ -133,7 +134,7 @@ const FormCliente = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('Provincia')}</label>
+        <label>{t('cliente.datos.provincia')}</label>
         <input
           type="text"
           name="provincia"
@@ -144,7 +145,7 @@ const FormCliente = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('Código postal')}</label>
+        <label>{t('cliente.datos.codigo_postal')}</label>
         <input
           type="text"
           name="codigo_postal"
@@ -155,7 +156,7 @@ const FormCliente = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('País')}</label>
+        <label>{t('cliente.datos.pais')}</label>
         <input
           type="text"
           name="pais"
@@ -166,7 +167,7 @@ const FormCliente = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('Correo electrónico')}</label>
+        <label>{t('cliente.datos.email')}</label>
         <input
           type="email"
           name="email"
@@ -177,7 +178,7 @@ const FormCliente = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('Teléfono')}</label>
+        <label>{t('cliente.datos.telefono')}</label>
         <input
           type="text"
           name="telefono"
@@ -188,7 +189,7 @@ const FormCliente = ({ onSubmit }: Props) => {
       </div>
 
       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        {t('Guardar cliente')}
+        {t('cliente.boton.guardar_cliente')}
       </button>
     </form>
   )
