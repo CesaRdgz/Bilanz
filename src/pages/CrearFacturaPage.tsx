@@ -15,7 +15,7 @@ const CrearFacturaPage = () => {
       alert('Error al crear factura')
     } else {
       const facturaCreada = data as unknown as Factura
-      alert('Factura creada con éxito: ' + facturaCreada.numero_factura)
+      alert('Factura creada con éxito: ' + facturaCreada.numero)
       // Opcional: redirigir a listado de facturas
     }
   }
