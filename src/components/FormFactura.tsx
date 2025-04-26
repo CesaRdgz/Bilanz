@@ -111,6 +111,26 @@ const FormFactura = ({ onSubmit }: Props) => {
           {dropdownVisible && clientesFiltradas.length > 0 && (
             <ul className="absolute z-10 border rounded mt-1 bg-white w-full max-h-60 overflow-y-auto shadow">
               
+              {/* Empresas */}
+              {clientesFiltradas.some(cli => cli.tipo_cliente === 'empresa') && (
+                <>
+                  <li className="px-3 py-2 bg-gray-100 text-gray-700 font-semibold sticky top-0">
+                    {t('Empresas')}
+                  </li>
+                  {clientesFiltradas
+                    .filter(cli => cli.tipo_cliente === 'empresa')
+                    .map(cli => (
+                      <li
+                        key={cli.id}
+                        onClick={() => handleClienteSelect(cli)}
+                        className="cursor-pointer px-3 py-2 hover:bg-blue-100"
+                      >
+                        {cli.nombre}
+                      </li>
+                    ))}
+                </>
+              )}
+
               {/* Particulares */}
               {clientesFiltradas.some(cli => cli.tipo_cliente === 'particular') && (
                 <>
@@ -131,25 +151,7 @@ const FormFactura = ({ onSubmit }: Props) => {
                 </>
               )}
 
-              {/* Empresas */}
-              {clientesFiltradas.some(cli => cli.tipo_cliente === 'empresa') && (
-                <>
-                  <li className="px-3 py-2 bg-gray-100 text-gray-700 font-semibold sticky top-0">
-                    {t('Empresas')}
-                  </li>
-                  {clientesFiltradas
-                    .filter(cli => cli.tipo_cliente === 'empresa')
-                    .map(cli => (
-                      <li
-                        key={cli.id}
-                        onClick={() => handleClienteSelect(cli)}
-                        className="cursor-pointer px-3 py-2 hover:bg-blue-100"
-                      >
-                        {cli.nombre}
-                      </li>
-                    ))}
-                </>
-              )}
+              
             </ul>
           )}
       </div>
