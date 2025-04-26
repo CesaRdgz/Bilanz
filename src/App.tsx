@@ -10,6 +10,7 @@ import HomePage from './pages/HomePage';
 import CrearClientePage from './pages/CrearClientePage';
 import CrearEmisorPage from './pages/CrearEmisorPage';
 import VistaClientesPage from './pages/VistaClientesPage';
+import EditarClientePage from './pages/EditarClientePage';
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
         <Route path="/usuarios/CrearEmisor" element={<CrearEmisorPage/>} />
         <Route path="/cliente/CrearCliente" element={<CrearClientePage />} />
         <Route path="/cliente/VistaClientes" element={<VistaClientesPage />} />
-        <Route path="/cliente/EditarCliente" element={<VistaClientesPage />} />
+        <Route path="/cliente/EditarCliente/:id" element={<EditarClientePage />} />
         <Route path="/facturas/nueva" element={<CrearFacturaPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
       </Routes>

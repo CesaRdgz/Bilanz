@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Cliente } from '../../types'
-import { encriptar } from '../../utils/encryption'
-
+import { desencriptar, encriptar } from '../../utils/encryption'
 
 interface Props {
   onSubmit: (cliente: Cliente) => void
+  clienteInicial?: Cliente // 👈 Nuevo: cliente a editar si lo hay
 }
 
-const FormCliente = ({ onSubmit }: Props) => {
+const FormCliente = ({ onSubmit, clienteInicial }: Props) => {
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}')
   const { t } = useTranslation()
 
@@ -28,6 +28,13 @@ const FormCliente = ({ onSubmit }: Props) => {
     telefono: '',
   })
 
+  // Cuando recibimos un clienteInicial (modo edición), lo precargamos
+  useEffect(() => {
+    if (clienteInicial) {
+      setCliente(clienteInicial)
+    }
+  }, [clienteInicial])
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -40,13 +47,20 @@ const FormCliente = ({ onSubmit }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (cliente.cif) cliente.cif = encriptar(cliente.cif)
-    if (cliente.nif) cliente.nif = encriptar(cliente.nif)
-    onSubmit(cliente)
+    const clienteAGuardar = { ...cliente }
+
+    // Solo en creación, ciframos NIF/CIF
+    if (!clienteInicial) {
+      if (clienteAGuardar.cif) clienteAGuardar.cif = encriptar(clienteAGuardar.cif)
+      if (clienteAGuardar.nif) clienteAGuardar.nif = encriptar(clienteAGuardar.nif)
+    }
+
+    onSubmit(clienteAGuardar)
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* El resto de tu formulario igual... */}
       <div>
         <label>{t('cliente.datos.tipo_cliente')}</label>
         <select
@@ -89,7 +103,7 @@ const FormCliente = ({ onSubmit }: Props) => {
             <input
               type="text"
               name="nif"
-              value={cliente.nif}
+              value={desencriptar(cliente.nif!)}
               onChange={handleChange}
               className="w-full border rounded p-2"
               required
@@ -104,7 +118,7 @@ const FormCliente = ({ onSubmit }: Props) => {
           <input
             type="text"
             name="cif"
-            value={cliente.cif}
+            value={desencriptar(cliente.cif!)}
             onChange={handleChange}
             className="w-full border rounded p-2"
             required
@@ -189,7 +203,10 @@ const FormCliente = ({ onSubmit }: Props) => {
       </div>
 
       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        {t('cliente.boton.guardar_cliente')}
+        {/* Cambiamos el texto según si estamos creando o editando */}
+        {clienteInicial
+          ? t('cliente.boton.editar_cliente') // 👈 tendrás que poner este texto en i18n
+          : t('cliente.boton.guardar_cliente')}
       </button>
     </form>
   )
