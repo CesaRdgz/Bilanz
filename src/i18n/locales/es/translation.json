@@ -23,6 +23,13 @@
         "telefono": "Teléfono"
     },
 
+    "emisor": {
+        "titulo": "Emisor",
+        "tipo_emisor": "Tipo de emisor",
+        "empresa": "Empresa",
+        "autonomo": "Autonomo"
+    },
+
     "cliente": {
         "titulo": "Clientes",
         "tipo_cliente": "Tipo de cliente",
