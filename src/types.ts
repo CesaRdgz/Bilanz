@@ -24,7 +24,7 @@ export interface Usuario {
 export interface Emisor {
   id?: string;
   usuario_id: string;
-  tipo: 'autonomo' | 'cliente';
+  tipo: 'autonomo' | 'empresa';
   nombre: string;
   apellidos?: string;
   nif?: string;

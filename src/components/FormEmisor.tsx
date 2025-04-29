@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Emisor } from '../types'
-import { encriptar } from '../utils/encryption'
+import { desencriptar, encriptar } from '../utils/encryption'
+import { obtenerEmisorPorUsuario, crearEmisor, actualizarEmisor } from '../services/emisorService'
+import { ToastContainer, toast } from 'react-toastify'
 
 interface Props {
   onSubmit: (emisor: Emisor) => void
@@ -24,25 +26,50 @@ const FormEmisor = ({ onSubmit }: Props) => {
     codigo_postal: '',
     pais: '',
   })
+  const [isEditing, setIsEditing] = useState(false)
+
+  useEffect(() => {
+    const cargarEmisor = async () => {
+      const { data, error } = await obtenerEmisorPorUsuario(usuario.id)
+      if (data) {
+        setEmisor({
+          ...data,
+          nif: data.nif ? desencriptar(data.nif) : '',
+          cif: data.cif ? desencriptar(data.cif) : '',
+        })
+        setIsEditing(true)
+      } else if (error) {
+        console.error(error)
+      }
+    }
+    cargarEmisor()
+  }, [usuario.id])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    setEmisor(prev => ({
-      ...prev,
-      [name]: value,
-    }))
+    setEmisor(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (emisor.cif) {
-      emisor.cif = encriptar(emisor.cif);
-    }
-    if (emisor.nif) {
-      emisor.nif = encriptar(emisor.nif);
+
+    const emisorAEnviar = {
+      ...emisor,
+      nif: emisor.nif ? encriptar(emisor.nif) : '',
+      cif: emisor.cif ? encriptar(emisor.cif) : '',
     }
 
-    onSubmit(emisor)
+    const { data, error } = isEditing
+      ? await actualizarEmisor(emisorAEnviar)
+      : await crearEmisor(emisorAEnviar)
+
+    if (data) {
+      onSubmit(data)
+      localStorage.setItem('emisor', JSON.stringify(data))
+      toast.success(isEditing ? t('Emisor actualizado con éxito') : t('Emisor guardado con éxito'))
+    } else if (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -50,8 +77,8 @@ const FormEmisor = ({ onSubmit }: Props) => {
       <div>
         <label>{t('Tipo de emisor')}</label>
         <select name="tipo" value={emisor.tipo} onChange={handleChange} className="w-full border rounded p-2">
-          <option value="autonomo">{t('Autónomo')}</option>
-          <option value="cliente">{t('Cliente')}</option>
+          <option value="autonomo">{t('emisor.autonomo')}</option>
+          <option value="empresa">{t('emisor.empresa')}</option>
         </select>
       </div>
 
@@ -94,7 +121,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
         </>
       )}
 
-      {emisor.tipo === 'cliente' && (
+      {emisor.tipo === 'empresa' && (
         <div>
           <label>{t('CIF')}</label>
           <input
@@ -163,8 +190,10 @@ const FormEmisor = ({ onSubmit }: Props) => {
       </div>
 
       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        {t('Guardar emisor')}
+        {isEditing ? t('Actualizar emisor') : t('Guardar emisor')}
       </button>
+
+      <ToastContainer />
     </form>
   )
 }
