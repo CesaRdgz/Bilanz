@@ -8,6 +8,8 @@
         "iva_total": "IVA Total",
         "total": "Total",
         "notas": "Notas",
+        "concepto": "Concepto",
+        "base_imponible": "Base imponible",
         "crear_factura": "Crear Factura",
         "lista_facturas": "Lista de Facturas",
         "nueva_factura": "Nueva Factura"
