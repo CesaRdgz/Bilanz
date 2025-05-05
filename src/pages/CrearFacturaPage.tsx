@@ -1,28 +1,22 @@
 import { useTranslation } from 'react-i18next'
 
-import FormFactura from '../components/FormFactura';
-import { crearFactura } from '../services/facturasService'
+import FormFactura from '../components/Clientes/FormFactura';
 import { Factura } from '../types'
+import { useNavigate } from 'react-router-dom';
 
 const CrearFacturaPage = () => {
 
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
   
   const handleCrear = async (factura: Factura) => {
-    const { data, error } = await crearFactura(factura);
-    if (error) {
-      console.error('Error creando factura:', error)
-      alert('Error al crear factura')
-    } else {
-      const facturaCreada = data as unknown as Factura
-      alert('Factura creada con éxito: ' + facturaCreada.numero)
-      // Opcional: redirigir a listado de facturas
-    }
+    navigate('/dashboard')
   }
 
   return (
     <div className="max-w-md mx-auto mt-8">
-      <h1 className="text-2xl font-bold mb-4">{t('facturas.nueva_factura')}</h1>
+      <h1 className="text-2xl font-bold mb-4">{t('factura.nueva_factura')}</h1>
       <FormFactura onSubmit={handleCrear} />
     </div>
   )
