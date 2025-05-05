@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { loginUsuario } from '../services/authService'
 import { obtenerEmisorPorUsuario } from '../services/emisorService'
 
 const LoginPage = () => {
+  const { t } = useTranslation() // Hook de traducción
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -29,7 +31,7 @@ const LoginPage = () => {
       const { data, error } = await obtenerEmisorPorUsuario(usuario.id!)
 
       localStorage.setItem('usuario', JSON.stringify(usuarioParaGuardar))
-      if (data)localStorage.setItem('emisor', JSON.stringify(data))
+      if (data) localStorage.setItem('emisor', JSON.stringify(data))
 
       navigate('/dashboard') // Página protegida (en blanco por ahora)
     }
@@ -37,11 +39,11 @@ const LoginPage = () => {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
-      <h1 className="text-xl font-bold mb-4">Iniciar Sesión</h1>
+      <h1 className="text-xl font-bold mb-4">{t('login.titulo')}</h1> {/* Traducido */}
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-red-500">{error}</p>}
         <div>
-          <label className="block text-sm font-medium">Email</label>
+          <label className="block text-sm font-medium">{t('login.email')}</label> {/* Traducido */}
           <input
             type="text"
             className="w-full border px-3 py-2 rounded"
@@ -51,7 +53,7 @@ const LoginPage = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium">Contraseña</label>
+          <label className="block text-sm font-medium">{t('login.contraseña')}</label> {/* Traducido */}
           <input
             type="password"
             className="w-full border px-3 py-2 rounded"
@@ -64,14 +66,14 @@ const LoginPage = () => {
           type="submit"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mr-3"
         >
-          Entrar
+          {t('login.entrar')} {/* Traducido */}
         </button>
         <button
           type="button"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           onClick={() => navigate('/usuarios/nuevo')}
         >
-          Registrarse
+          {t('login.registrarse')} {/* Traducido */}
         </button>
       </form>
     </div>

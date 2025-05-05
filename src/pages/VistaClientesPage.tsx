@@ -1,22 +1,16 @@
+import { Cliente } from '../types'  // Asegúrate de importar el tipo Cliente
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { Cliente } from '../types'
-import { eliminarCliente, obtenerClientes } from '../services/clienteService'
-import ConfirmacionEliminarCliente from '../components/Clientes/ConfirmacionEliminarCliente'
-import TablaClientes from '../components/Clientes/TablaClientes'
-import BuscadorClientes from '../components/Clientes/BuscadorClientes'
-
-// Importa el ícono de React Icons
+import { obtenerClientes, eliminarCliente } from '../services/clienteService'
 import { FaPlusCircle } from 'react-icons/fa'
 import { useTranslation } from 'react-i18next'
+import TablaClientes from '../components/Clientes/TablaClientes'
+import ConfirmacionEliminarCliente from '../components/Clientes/ConfirmacionEliminarCliente'
 
 const VistaClientesPage = () => {
   const [clientes, setClientes] = useState<Cliente[]>([])
-  const [busqueda, setBusqueda] = useState('')
-  const [dropdownVisible, setDropdownVisible] = useState(false)
   const [clienteAEliminar, setClienteAEliminar] = useState<Cliente | null>(null)
   const navigate = useNavigate()
-
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -27,9 +21,17 @@ const VistaClientesPage = () => {
     cargarClientes()
   }, [])
 
-  const filtrados = clientes.filter(cliente =>
-    (cliente.nombre + ' ' + (cliente.apellidos || '')).toLowerCase().includes(busqueda.toLowerCase())
-  )
+  const empresas = clientes.filter(c => c.tipo_cliente === 'empresa')
+  const particulares = clientes.filter(c => c.tipo_cliente === 'particular')
+
+  const handleEliminar = async (cliente: Cliente) => {
+    await eliminarCliente(cliente.id!)
+    setClientes(clientes.filter(c => c.id !== cliente.id))
+  }
+
+  const handleEditar = (id: string) => {
+    navigate(`/cliente/EditarCliente/${id}`)
+  }
 
   const confirmarEliminacion = async () => {
     if (!clienteAEliminar) return
@@ -42,41 +44,21 @@ const VistaClientesPage = () => {
     setClienteAEliminar(null)
   }
 
-  const empresas = clientes.filter(c => c.tipo_cliente === 'empresa')
-  const particulares = clientes.filter(c => c.tipo_cliente === 'particular')
-
-  // Función para redirigir al formulario de creación de empresa
-  const handleCrearEmpresa = () => {
-    navigate('/cliente/CrearCliente')
-  }
-
   return (
     <div className="p-4">
-      {/* Buscador de clientes */}
-      <BuscadorClientes
-        busqueda={busqueda}
-        setBusqueda={setBusqueda}
-        clientesFiltrados={filtrados}
-        visible={dropdownVisible}
-        setVisible={setDropdownVisible}
-      />
-
-      {/* Botón para crear empresa */}
       <div className="mb-4 flex justify-start">
         <button
-          onClick={handleCrearEmpresa}
+          onClick={() => navigate('/cliente/CrearCliente')}
           className="flex items-center justify-center w-40 h-12 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 transition duration-200"
         >
-          {/* Icono de "+" rodeado por un círculo */}
           <FaPlusCircle className="w-6 h-6 mr-2" /> {t('cliente.boton.nuevo_cliente')}
         </button>
       </div>
 
-      {/* Tablas de empresas y particulares */}
       <div className="flex flex-col md:flex-row gap-6">
         {empresas.length > 0 && (
           <div>
-            <h2 className="text-xl font-semibold mb-2">{t('cliente.titulo')}</h2>
+            <h2 className="text-xl font-semibold mb-2">{t('cliente.titulo.clientes')}</h2>
             <TablaClientes
               datos={empresas}
               columnas={[
@@ -85,8 +67,8 @@ const VistaClientesPage = () => {
                 t('cliente.datos.telefono'),
                 t('cliente.datos.email'),
               ]}
-              onEliminar={(cliente) => setClienteAEliminar(cliente)}
-              onEditar={(cliente) => console.log("Editar", cliente)}
+              onEliminar={handleEliminar}
+              onEditar={handleEditar} // Pasamos el onEditar
             />
           </div>
         )}
@@ -102,14 +84,13 @@ const VistaClientesPage = () => {
                 t('cliente.datos.telefono'),
                 t('cliente.datos.email'),
               ]}
-              onEliminar={(cliente) => setClienteAEliminar(cliente)}
-              onEditar={(cliente) => console.log("Editar", cliente)}
+              onEliminar={handleEliminar}
+              onEditar={handleEditar} // Pasamos el onEditar
             />
           </div>
         )}
       </div>
 
-      {/* Modal de confirmación para eliminar cliente */}
       <ConfirmacionEliminarCliente
         cliente={clienteAEliminar}
         onConfirmar={confirmarEliminacion}

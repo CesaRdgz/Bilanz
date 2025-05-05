@@ -1,3 +1,5 @@
+// FormEmisor.tsx
+
 import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import { Emisor } from '../types'
@@ -66,7 +68,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
     if (data) {
       onSubmit(data)
       localStorage.setItem('emisor', JSON.stringify(data))
-      toast.success(isEditing ? t('Emisor actualizado con éxito') : t('Emisor guardado con éxito'))
+      toast.success(isEditing ? t('emisor.actualizado_exito') : t('emisor.guardado_exito'))
     } else if (error) {
       console.error(error)
     }
@@ -75,7 +77,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label>{t('Tipo de emisor')}</label>
+        <label>{t('emisor.tipo_emisor')}</label>
         <select name="tipo" value={emisor.tipo} onChange={handleChange} className="w-full border rounded p-2">
           <option value="autonomo">{t('emisor.autonomo')}</option>
           <option value="empresa">{t('emisor.empresa')}</option>
@@ -83,7 +85,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('Nombre')}</label>
+        <label>{t('emisor.nombre')}</label>
         <input
           type="text"
           name="nombre"
@@ -97,7 +99,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
       {emisor.tipo === 'autonomo' && (
         <>
           <div>
-            <label>{t('Apellidos')}</label>
+            <label>{t('emisor.apellidos')}</label>
             <input
               type="text"
               name="apellidos"
@@ -108,7 +110,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
           </div>
 
           <div>
-            <label>{t('NIF / DNI')}</label>
+            <label>{t('emisor.nif')}</label>
             <input
               type="text"
               name="nif"
@@ -123,7 +125,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
 
       {emisor.tipo === 'empresa' && (
         <div>
-          <label>{t('CIF')}</label>
+          <label>{t('emisor.cif')}</label>
           <input
             type="text"
             name="cif"
@@ -136,7 +138,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
       )}
 
       <div>
-        <label>{t('Dirección fiscal')}</label>
+        <label>{t('emisor.direccion_fiscal')}</label>
         <textarea
           name="direccion_fiscal"
           value={emisor.direccion_fiscal}
@@ -146,7 +148,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('Ciudad')}</label>
+        <label>{t('emisor.ciudad')}</label>
         <input
           type="text"
           name="ciudad"
@@ -157,7 +159,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('Provincia')}</label>
+        <label>{t('emisor.provincia')}</label>
         <input
           type="text"
           name="provincia"
@@ -168,7 +170,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('Código postal')}</label>
+        <label>{t('emisor.codigo_postal')}</label>
         <input
           type="text"
           name="codigo_postal"
@@ -179,7 +181,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label>{t('País')}</label>
+        <label>{t('emisor.pais')}</label>
         <input
           type="text"
           name="pais"
@@ -190,7 +192,7 @@ const FormEmisor = ({ onSubmit }: Props) => {
       </div>
 
       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        {isEditing ? t('Actualizar emisor') : t('Guardar emisor')}
+        {isEditing ? t('emisor.actualizar') : t('emisor.guardar')}
       </button>
 
       <ToastContainer />
