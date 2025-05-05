@@ -6,12 +6,16 @@ import { FaPlusCircle } from 'react-icons/fa'
 import { useTranslation } from 'react-i18next'
 import TablaClientes from '../components/Clientes/TablaClientes'
 import ConfirmacionEliminarCliente from '../components/Clientes/ConfirmacionEliminarCliente'
+import BuscadorClientes from '../components/Clientes/BuscadorClientes'
 
 const VistaClientesPage = () => {
   const [clientes, setClientes] = useState<Cliente[]>([])
   const [clienteAEliminar, setClienteAEliminar] = useState<Cliente | null>(null)
+  const [busqueda, setBusqueda] = useState('')
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const [dropdownVisible, setDropdownVisible] = useState(false)
+
 
   useEffect(() => {
     const cargarClientes = async () => {
@@ -23,6 +27,10 @@ const VistaClientesPage = () => {
 
   const empresas = clientes.filter(c => c.tipo_cliente === 'empresa')
   const particulares = clientes.filter(c => c.tipo_cliente === 'particular')
+
+  const filtrados = clientes.filter(cliente =>
+    (cliente.nombre + ' ' + (cliente.apellidos || '')).toLowerCase().includes(busqueda.toLowerCase())
+  )
 
   const handleEliminar = async (cliente: Cliente) => {
     await eliminarCliente(cliente.id!)
@@ -46,6 +54,16 @@ const VistaClientesPage = () => {
 
   return (
     <div className="p-4">
+
+      {/* Buscador de clientes */}
+      <BuscadorClientes
+        busqueda={busqueda}
+        setBusqueda={setBusqueda}
+        clientesFiltrados={filtrados}
+        visible={dropdownVisible}
+        setVisible={setDropdownVisible}
+      />
+
       <div className="mb-4 flex justify-start">
         <button
           onClick={() => navigate('/cliente/CrearCliente')}
