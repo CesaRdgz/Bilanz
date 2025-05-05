@@ -7,12 +7,14 @@ interface Props {
   datos: Cliente[]
   columnas: string[]
   onEliminar: (cliente: Cliente) => void
+  onEditar: (id: string) => void  // Añadimos la propiedad onEditar
 }
 
-const TablaClientes = ({ datos, columnas, onEliminar }: Props) => {
+const TablaClientes = ({ datos, columnas, onEliminar, onEditar }: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
+  // Función para manejar la edición
   const handleEditar = (id: string) => {
     navigate(`/cliente/EditarCliente/${id}`)
   }

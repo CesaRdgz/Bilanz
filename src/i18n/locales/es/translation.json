@@ -12,7 +12,7 @@
         "lista_facturas": "Lista de Facturas",
         "nueva_factura": "Nueva Factura"
     },
-    
+
     "usuario": {
         "titulo": "Usuarios",
         "nombre": "Nombre",
@@ -27,11 +27,23 @@
         "titulo": "Emisor",
         "tipo_emisor": "Tipo de emisor",
         "empresa": "Empresa",
-        "autonomo": "Autonomo"
+        "autonomo": "Autónomo",
+        "nombre": "Nombre",
+        "apellidos": "Apellidos",
+        "nif": "NIF / DNI",
+        "cif": "CIF",
+        "direccion_fiscal": "Dirección fiscal",
+        "ciudad": "Ciudad",
+        "provincia": "Provincia",
+        "codigo_postal": "Código postal",
+        "pais": "País",
+        "guardar": "Guardar emisor",
+        "actualizar": "Actualizar emisor",
+        "guardado_exito": "Emisor guardado con éxito",
+        "actualizado_exito": "Emisor actualizado con éxito"
     },
 
     "cliente": {
-        "titulo": "Clientes",
         "tipo_cliente": "Tipo de cliente",
         "empresa": "Empresa",
         "empresas": "Empresas",
@@ -52,7 +64,7 @@
             "codigo_postal": "Código postal",
             "pais": "País"
         },
-        "boton":{
+        "boton": {
             "nuevo_cliente": "Nuevo cliente",
             "editar_cliente": "Editar cliente",
             "eliminar_cliente": "Eliminar cliente",
@@ -63,10 +75,15 @@
         "popup": {
             "eliminar_cliente": "¿Estás seguro que quieres eliminar este cliente?",
             "eliminar_cliente_confirmacion": "Sí, eliminar"
-        }, 
-        "placeholder": {            
+        },
+        "placeholder": {
             "buscar_cliente": "Buscar clientes..."
-        }
+        },
+        "titulo": {
+            "editar": "Editar cliente",
+            "clientes": "Clientes"
+        },
+        "cargando": "Cargando cliente..."
     },
 
     "boton": {
@@ -74,5 +91,22 @@
         "eliminar": "Eliminar",
         "si": "Sí",
         "no": "No"
+    },
+
+    "login": {
+        "titulo": "Iniciar Sesión",
+        "email": "Email",
+        "contraseña": "Contraseña",
+        "entrar": "Entrar",
+        "registrarse": "Registrarse",
+        "error": "Error al iniciar sesión"
+    },
+
+    
+    "dashboard": {
+        "bienvenido": "Bienvenido, {{nombre}}",
+        "area_privada": "Esta es tu área privada.",
+        "crear_factura": "Crear Factura",
+        "rellenar_datos_facturacion": "Rellenar datos de facturación"
     }
 }
