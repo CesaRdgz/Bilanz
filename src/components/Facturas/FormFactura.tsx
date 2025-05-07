@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Cliente, Factura } from '../../types'
 import supabase from '../../utils/supabase'
-import { crearFactura } from '../../services/facturasService'
+import { editarFactura, crearFactura } from '../../services/facturasService'
 import { desencriptar } from '../../utils/encryption'
+import { useNavigate, useParams } from 'react-router-dom'
 
 interface Props {
   onSubmit: (factura: Factura) => void
@@ -13,6 +14,8 @@ const FormFactura = ({ onSubmit }: Props) => {
   const { t } = useTranslation()
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}')
   const emisor = JSON.parse(localStorage.getItem('emisor') || '{}')
+  const navigate = useNavigate()
+  const { id } = useParams() // Obtiene el ID de la factura desde la URL
 
   const [factura, setFactura] = useState<Factura>({
     emisor_id: emisor.id,
@@ -44,6 +47,31 @@ const FormFactura = ({ onSubmit }: Props) => {
     }
     fetchClientes()
   }, [usuario.id])
+
+  useEffect(() => {
+    const fetchFactura = async () => {
+      if (id) {
+        const { data, error } = await supabase
+          .from('facturas')
+          .select('*')
+          .eq('id', id)
+          .single()
+  
+        if (data) {
+          setFactura(data)
+          const cliente = clientes.find(cliente => cliente.id === data.cliente_id) || null
+          setClienteSeleccionada(cliente)
+          setBusqueda(
+            cliente ? cliente.nombre + (cliente.apellidos ? ' ' + cliente.apellidos : '') : ''
+          )
+        } else {
+          console.error('Error al obtener la factura', error)
+        }
+      }
+    }
+    fetchFactura()
+  }, [id, clientes])
+  
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -85,9 +113,22 @@ const FormFactura = ({ onSubmit }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const { data, error } = await crearFactura(factura)
+    let data, error
+    if (id) {
+      // Si estamos editando, actualizamos la factura
+      const { data: updatedData, error: updateError } = await editarFactura(id, factura)
+      data = updatedData
+      error = updateError
+    } else {
+      // Si es una nueva factura, creamos
+      const { data: createdData, error: createError } = await crearFactura(factura)
+      data = createdData
+      error = createError
+    }
+
     if (!error) onSubmit(data as unknown as Factura)
     else console.error(error)
+    navigate('/facturas/VistaFacturas')
   }
 
   const clientesFiltradas = clientes.filter(cli =>
@@ -95,31 +136,38 @@ const FormFactura = ({ onSubmit }: Props) => {
   )
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-white rounded-lg shadow relative">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 p-4 bg-white rounded-lg shadow relative"
+    >
       <div ref={dropdownRef} className="relative">
-        <label className="block text-gray-700">{t('cliente.datos.nombre')}</label>
+        <label className="block text-gray-700">
+          {t("cliente.datos.nombre")}
+        </label>
         <input
           type="text"
           value={busqueda}
-          onChange={e => {
-            setBusqueda(e.target.value)
-            setDropdownVisible(true)
+          onChange={(e) => {
+            setBusqueda(e.target.value);
+            setDropdownVisible(true);
           }}
           onFocus={() => setDropdownVisible(true)}
           className="w-full border rounded p-2"
-          placeholder={t('cliente.placeholder.buscar_cliente')}
+          placeholder={t("cliente.placeholder.buscar_cliente")}
         />
         {dropdownVisible && clientesFiltradas.length > 0 && (
           <ul className="absolute z-10 border rounded mt-1 bg-white w-full max-h-60 overflow-y-auto shadow">
             {/* Empresas */}
-            {clientesFiltradas.some(cli => cli.tipo_cliente === 'empresa') && (
+            {clientesFiltradas.some(
+              (cli) => cli.tipo_cliente === "empresa"
+            ) && (
               <>
                 <li className="px-3 py-2 bg-gray-100 text-gray-700 font-semibold sticky top-0">
-                  {t('cliente.empresas')}
+                  {t("cliente.empresas")}
                 </li>
                 {clientesFiltradas
-                  .filter(cli => cli.tipo_cliente === 'empresa')
-                  .map(cli => (
+                  .filter((cli) => cli.tipo_cliente === "empresa")
+                  .map((cli) => (
                     <li
                       key={cli.id}
                       onClick={() => handleClienteSelect(cli)}
@@ -132,20 +180,22 @@ const FormFactura = ({ onSubmit }: Props) => {
             )}
 
             {/* Particulares */}
-            {clientesFiltradas.some(cli => cli.tipo_cliente === 'particular') && (
+            {clientesFiltradas.some(
+              (cli) => cli.tipo_cliente === "particular"
+            ) && (
               <>
                 <li className="px-3 py-2 bg-gray-100 text-gray-700 font-semibold sticky top-0">
-                  {t('cliente.particulares')}
+                  {t("cliente.particulares")}
                 </li>
                 {clientesFiltradas
-                  .filter(cli => cli.tipo_cliente === 'particular')
-                  .map(cli => (
+                  .filter((cli) => cli.tipo_cliente === "particular")
+                  .map((cli) => (
                     <li
                       key={cli.id}
                       onClick={() => handleClienteSelect(cli)}
                       className="cursor-pointer px-3 py-2 hover:bg-blue-100"
                     >
-                      {cli.nombre + (cli.apellidos ? ' ' + cli.apellidos : '')}
+                      {cli.nombre + (cli.apellidos ? " " + cli.apellidos : "")}
                     </li>
                   ))}
               </>
@@ -154,28 +204,63 @@ const FormFactura = ({ onSubmit }: Props) => {
         )}
       </div>
 
-      {clienteSeleccionada && clienteSeleccionada.tipo_cliente === 'empresa' && (
-        <div className="bg-gray-50 p-3 rounded border text-sm text-gray-700">
-          <p><strong>{t('cliente.datos.cif')}:</strong> {desencriptar(clienteSeleccionada.cif!)}</p>
-          <p><strong>{t('cliente.datos.direccion')}:</strong> {clienteSeleccionada.direccion}</p>
-          <p><strong>{t('cliente.datos.ciudad')}:</strong> {clienteSeleccionada.ciudad}</p>
-          <p><strong>{t('cliente.datos.provincia')}:</strong> {clienteSeleccionada.provincia}</p>
-          <p><strong>{t('cliente.datos.pais')}:</strong> {clienteSeleccionada.pais}</p>
-        </div>
-      )}
+      {clienteSeleccionada &&
+        clienteSeleccionada.tipo_cliente === "empresa" && (
+          <div className="bg-gray-50 p-3 rounded border text-sm text-gray-700">
+            <p>
+              <strong>{t("cliente.datos.cif")}:</strong>{" "}
+              {desencriptar(clienteSeleccionada.cif!)}
+            </p>
+            <p>
+              <strong>{t("cliente.datos.direccion")}:</strong>{" "}
+              {clienteSeleccionada.direccion}
+            </p>
+            <p>
+              <strong>{t("cliente.datos.ciudad")}:</strong>{" "}
+              {clienteSeleccionada.ciudad}
+            </p>
+            <p>
+              <strong>{t("cliente.datos.provincia")}:</strong>{" "}
+              {clienteSeleccionada.provincia}
+            </p>
+            <p>
+              <strong>{t("cliente.datos.pais")}:</strong>{" "}
+              {clienteSeleccionada.pais}
+            </p>
+          </div>
+        )}
 
-      {clienteSeleccionada && clienteSeleccionada.tipo_cliente === 'particular' && (
-        <div className="bg-gray-50 p-3 rounded border text-sm text-gray-700">
-          <p><strong>{t('cliente.datos.nif')}:</strong> {desencriptar(clienteSeleccionada.nif!)}</p>
-          <p><strong>{t('cliente.datos.direccion')}:</strong> {clienteSeleccionada.direccion}</p>
-          <p><strong>{t('cliente.datos.ciudad')}:</strong> {clienteSeleccionada.ciudad}</p>
-          <p><strong>{t('cliente.datos.provincia')}:</strong> {clienteSeleccionada.provincia}</p>
-          <p><strong>{t('cliente.datos.pais')}:</strong> {clienteSeleccionada.pais}</p>
-        </div>
-      )}
+      {clienteSeleccionada &&
+        clienteSeleccionada.tipo_cliente === "particular" && (
+          <div className="bg-gray-50 p-3 rounded border text-sm text-gray-700">
+            <p>
+              <strong>{t("cliente.datos.nif")}:</strong>{" "}
+              {desencriptar(clienteSeleccionada.nif!)}
+            </p>
+            <p>
+              <strong>{t("cliente.datos.direccion")}:</strong>{" "}
+              {clienteSeleccionada.direccion}
+            </p>
+            <p>
+              <strong>{t("cliente.datos.ciudad")}:</strong>{" "}
+              {clienteSeleccionada.ciudad}
+            </p>
+            <p>
+              <strong>{t("cliente.datos.provincia")}:</strong>{" "}
+              {clienteSeleccionada.provincia}
+            </p>
+            <p>
+              <strong>{t("cliente.datos.pais")}:</strong>{" "}
+              {clienteSeleccionada.pais}
+            </p>
+          </div>
+        )}
 
+      {/* Otros campos del formulario */}
       <div>
-        <label className="block text-gray-700">{t('factura.numero_factura')}</label>
+        <label className="block text-gray-700">
+          {t("factura.numero_factura")}
+        </label>
         <input
           type="text"
           name="numero"
@@ -187,7 +272,9 @@ const FormFactura = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label className="block text-gray-700">{t('factura.fecha_emision')}</label>
+        <label className="block text-gray-700">
+          {t("factura.fecha_emision")}
+        </label>
         <input
           type="date"
           name="fecha_emision"
@@ -199,68 +286,75 @@ const FormFactura = ({ onSubmit }: Props) => {
       </div>
 
       <div>
-        <label className="block text-gray-700">{t('factura.concepto')}</label>
-        <input
-          type="text"
+        <label className="block text-gray-700">{t("factura.concepto")}</label>
+        <textarea
           name="concepto"
-          value={factura.concepto || ''}
+          value={factura.concepto}
           onChange={handleChange}
           className="mt-1 block w-full border px-3 py-2 rounded"
-        />
+          required
+        ></textarea>
       </div>
 
       <div>
-        <label className="block text-gray-700">{t('factura.base_imponible')}</label>
+        <label className="block text-gray-700">
+          {t("factura.base_imponible")}
+        </label>
         <input
           type="number"
-          step="0.01"
           name="base_imponible"
           value={factura.base_imponible}
           onChange={handleChange}
           className="mt-1 block w-full border px-3 py-2 rounded"
+          required
         />
       </div>
-
       <div>
-        <label className="block text-gray-700">{t('factura.iva_total')}</label>
+        <label className="block text-gray-700">{t("factura.iva_total")}</label>
         <input
           type="number"
           name="iva"
-          value={factura.iva || 0}
-          readOnly
-          className="mt-1 block w-full border px-3 py-2 rounded bg-gray-100"
+          value={factura.iva}
+          onChange={handleChange}
+          className="mt-1 block w-full border px-3 py-2 rounded"
+          disabled
         />
       </div>
 
       <div>
-        <label className="block text-gray-700">{t('factura.total')}</label>
+        <label className="block text-gray-700">{t("factura.total")}</label>
         <input
           type="number"
           name="total"
           value={factura.total}
-          readOnly
-          className="mt-1 block w-full border px-3 py-2 rounded bg-gray-100"
+          onChange={handleChange}
+          className="mt-1 block w-full border px-3 py-2 rounded"
+          disabled
         />
       </div>
 
       <div>
-        <label className="block text-gray-700">{t('factura.notas')}</label>
+        <label className="block text-gray-700">
+          {t("factura.observaciones")}
+        </label>
         <textarea
           name="observaciones"
-          value={factura.observaciones || ''}
+          value={factura.observaciones}
           onChange={handleChange}
           className="mt-1 block w-full border px-3 py-2 rounded"
-        />
+        ></textarea>
       </div>
 
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        {t('factura.crear_factura')}
-      </button>
+      <div className="flex justify-between mt-4">
+        <button
+          type="submit"
+          className="px-6 py-2 bg-blue-600 text-white rounded"
+        >
+          {id ? t("boton.editar") : t("boton.crear")}
+        </button>
+      </div>
     </form>
-  )
+  );
 }
 
 export default FormFactura

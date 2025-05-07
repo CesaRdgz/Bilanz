@@ -12,7 +12,24 @@
         "base_imponible": "Base imponible",
         "crear_factura": "Crear Factura",
         "lista_facturas": "Lista de Facturas",
-        "nueva_factura": "Nueva Factura"
+        "nueva_factura": "Nueva Factura",
+        "observaciones": "Observaciones",  
+        "editar": "Editar factura",
+        "boton": {
+            "nueva_factura": "Nueva Factura"
+        },
+        "datos": {
+            "cliente": "Cliente",
+            "fecha": "Fecha",
+            "base_imponible": "Base Imponible",
+            "iva": "IVA",
+            "total": "Total",
+            "concepto": "Concepto"
+        },
+        "confirmar_eliminacion": {
+            "titulo": "Confirmación de eliminación",
+            "mensaje": "¿Estás seguro que quieres eliminar esta factura?"
+        }
     },
 
     "usuario": {
@@ -90,6 +107,7 @@
 
     "boton": {
         "editar": "Editar",
+        "crear": "Crear",
         "eliminar": "Eliminar",
         "si": "Sí",
         "no": "No"
@@ -110,5 +128,10 @@
         "area_privada": "Esta es tu área privada.",
         "crear_factura": "Crear Factura",
         "rellenar_datos_facturacion": "Rellenar datos de facturación"
+    },
+    "tabla":{
+        "mensaje": {
+            "sin_datos": "Aún no hay facturas disponibles"
+        }
     }
 }
