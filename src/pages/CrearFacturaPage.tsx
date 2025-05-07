@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import FormFactura from '../components/Clientes/FormFactura';
+import FormFactura from '../components/Facturas/FormFactura';
 import { Factura } from '../types'
 import { useNavigate } from 'react-router-dom';
 

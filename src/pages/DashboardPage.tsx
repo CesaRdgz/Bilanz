@@ -17,9 +17,9 @@ const DashboardPage = () => {
 
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4 mr-4"
-          onClick={() => navigate('/facturas/nueva')}
+          onClick={() => navigate('/facturas/VistaFacturas')}
         >
-          {t('dashboard.crear_factura')} {/* Traducido */}
+          {t('factura.titulo')} {/* Traducido */}
         </button>
 
         <button
